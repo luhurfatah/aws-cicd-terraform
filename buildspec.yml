@@ -22,9 +22,8 @@ phases:
       - cd ..
       - cp apps/app.zip infra/main/app-${CODEBUILD_RESOLVED_SOURCE_VERSION}.zip
       - sed -i 's/app-<COMMIT-HASH>/app-'"$CODEBUILD_RESOLVED_SOURCE_VERSION"'/g' infra/main/main.tf
-      - sed -i 's/<SECRET_NAME>/app-'"$SECRET_NAME"'/g' infra/main/main.tf
-      - sed -i 's/<SECRET_NAME>/app-'"$SECRET_NAME"'/g' scripts/retrieveSecret.py
-      - sed -i 's/<SECRET_NAME>/app-'"$SECRET_NAME"'/g' scripts/updateSecret.py
+      - sed -i 's/<SECRET_NAME>/'"$SECRET_NAME"'/g' scripts/retrieveSecret.py
+      - sed -i 's/<SECRET_NAME>/'"$SECRET_NAME"'/g' scripts/updateSecret.py
       - DB_HOST=$(python3 scripts/retrieveSecret.py --group db_credentials --key db_host)
       - DB_USER=$(python3 scripts/retrieveSecret.py --group db_credentials --key username)
       - DB_PASS=$(python3 scripts/retrieveSecret.py --group db_credentials --key password)
