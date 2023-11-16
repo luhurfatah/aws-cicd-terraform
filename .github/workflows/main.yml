@@ -24,10 +24,18 @@ jobs:
     
     - name : Replace variables
       run: |
+        SESSION_TOKEN_INFO=$(aws sts get-session-token --duration-seconds 3600)
+        export AWS_ACCESS_KEY_ID=$(echo "$SESSION_TOKEN_INFO" | jq -r .Credentials.AccessKeyId)
+        export AWS_SECRET_ACCESS_KEY=$(echo "$SESSION_TOKEN_INFO" | jq -r .Credentials.SecretAccessKey)
+        export AWS_SESSION_TOKEN=$AWS_SECRET_ACCESS_KEY(echo "$SESSION_TOKEN_INFO" | jq -r .Credentials.SessionToken)
+        sed -i 's/<ACCESS_KEY>/$AWS_ACCESS_KEY_ID/g' infra/support/main.tf
+        sed -i 's/<SECRET_KEY>/$AWS_SECRET_ACCESS_KEY/g' infra/support/main.tf
+        sed -i 's/<SESSION_TOKEN>/$AWS_SESSION_TOKEN/g' infra/support/main.tf
         sed -i 's/<DB_USER>/${{ secrets.DB_USER }}/g' infra/support/main.tf
         sed -i 's/<DB_PASS>/${{ secrets.DB_PASS }}/g' infra/support/main.tf
         sed -i 's/<DB_NAME>/${{ secrets.DB_NAME }}/g' infra/support/main.tf
         sed -i 's/<SECRET_NAME>/${{ secrets.SECRET_NAME }}/g' infra/support/main.tf
+        sed -i 's/<SECRET_NAME>/${{ secrets.SECRET_NAME }}/g' scripts/updateSecret.py
    
     - name: Deploy support infra
       run: |
