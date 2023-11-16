@@ -9,7 +9,7 @@ phases:
       - pip3 install boto3
       - wget https://releases.hashicorp.com/terraform/0.15.5/terraform_0.15.5_linux_amd64.zip
       - unzip terraform_0.15.5_linux_amd64.zip
-      - mv terraform /usr/local/bin/
+      - mv terraform /usr/local/bin/ 
       
   build:
     commands:
@@ -20,8 +20,7 @@ phases:
   post_build:
     commands:
       - cd ..
-      - cp apps/app.zip infra/main/app-${CODEBUILD_RESOLVED_SOURCE_VERSION}.zip
-      - sed -i 's/app-<COMMIT-HASH>/app-'"$CODEBUILD_RESOLVED_SOURCE_VERSION"'/g' infra/main/main.tf
+      - cp apps/app.zip infra/main/apps.zip
       - sed -i 's/<SECRET_NAME>/'"$SECRET_NAME"'/g' scripts/retrieveSecret.py
       - sed -i 's/<SECRET_NAME>/'"$SECRET_NAME"'/g' scripts/updateSecret.py
       - DB_HOST=$(python3 scripts/retrieveSecret.py --group db_credentials --key db_host)
