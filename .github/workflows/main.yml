@@ -6,46 +6,47 @@ on:
       - main
 
 jobs:
-  push_to_codecommit:
+  deploy_codecommit:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout Repository
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
 
-    - name: Configure AWS credentials
+    - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-southeast-1
-    
-    - name : Replace variables
+
+    - name: Replace Variables in Terraform Config
       run: |
         export SESSION_TOKEN_INFO=$(aws sts get-session-token --duration-seconds 3600)
         export AWS_ACCESS_KEY_ID=$(echo "$SESSION_TOKEN_INFO" | jq -r .Credentials.AccessKeyId)
         export AWS_SECRET_ACCESS_KEY=$(echo "$SESSION_TOKEN_INFO" | jq -r .Credentials.SecretAccessKey)
         export AWS_SESSION_TOKEN=$(echo "$SESSION_TOKEN_INFO" | jq -r .Credentials.SessionToken)
-        sed -i 's/<ACCESS_KEY>/$AWS_ACCESS_KEY_ID/g' infra/support/main.tf
-        sed -i 's/<SECRET_KEY>/$AWS_SECRET_ACCESS_KEY/g' infra/support/main.tf
-        sed -i 's/<SESSION_TOKEN>/$AWS_SESSION_TOKEN/g' infra/support/main.tf
-        sed -i 's/<DB_USER>/${{ secrets.DB_USER }}/g' infra/support/main.tf
-        sed -i 's/<DB_PASS>/${{ secrets.DB_PASS }}/g' infra/support/main.tf
-        sed -i 's/<DB_NAME>/${{ secrets.DB_NAME }}/g' infra/support/main.tf
-        sed -i 's/<SECRET_NAME>/${{ secrets.SECRET_NAME }}/g' infra/support/main.tf
-        sed -i 's/<SECRET_NAME>/${{ secrets.SECRET_NAME }}/g' scripts/updateSecret.py
-   
-    - name: Deploy support infra
+
+        sed -i "s/<ACCESS_KEY>/$AWS_ACCESS_KEY_ID/g" infra/support/main.tf
+        sed -i "s/<SECRET_KEY>/$AWS_SECRET_ACCESS_KEY/g" infra/support/main.tf
+        sed -i "s/<SESSION_TOKEN>/$AWS_SESSION_TOKEN/g" infra/support/main.tf
+        sed -i "s/<DB_USER>/${{ secrets.DB_USER }}/g" infra/support/main.tf
+        sed -i "s/<DB_PASS>/${{ secrets.DB_PASS }}/g" infra/support/main.tf
+        sed -i "s/<DB_NAME>/${{ secrets.DB_NAME }}/g" infra/support/main.tf
+        sed -i "s/<SECRET_NAME>/${{ secrets.SECRET_NAME }}/g" infra/support/main.tf
+        sed -i "s/<SECRET_NAME>/${{ secrets.SECRET_NAME }}/g" scripts/updateSecret.py
+
+    - name: Deploy Support Infrastructure with Terraform
       run: |
         cd infra/support
-        terraform init 
+        terraform init
         terraform apply --auto-approve
         CODE_COMMIT_URL=$(terraform output -raw repo_url)
         echo "CODE_COMMIT_URL=$CODE_COMMIT_URL" >> $GITHUB_ENV
 
-    - name: Set up Git
+    - name: Set up Git for CodeCommit
       run: |
         git config --global user.email "luhurfatah@gmail.com"
         git config --global user.name "luhurfatah"
@@ -53,4 +54,3 @@ jobs:
         git config --global credential.helper '!aws codecommit credential-helper $@'
         git config --global credential.UseHttpPath true
         git push codecommit main --force
-   
