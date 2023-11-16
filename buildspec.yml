@@ -27,10 +27,10 @@ phases:
       - DB_USER=$(python3 scripts/retrieveSecret.py --group db_credentials --key username)
       - DB_PASS=$(python3 scripts/retrieveSecret.py --group db_credentials --key password)
       - DB_NAME=$(python3 scripts/retrieveSecret.py --group db_credentials --key db_name)
-      - sed -i 's/<DB_HOST>/app-'"$DB_HOST"'/g' infra/main/main.tf
-      - sed -i 's/<DB_USER>/app-'"$DB_USER"'/g' infra/main/main.tf
-      - sed -i 's/<DB_PASS>/app-'"$DB_PASS"'/g' infra/main/main.tf
-      - sed -i 's/<DB_NAME>/app-'"$DB_NAME"'/g' infra/main/main.tf
+      - sed -i 's/<DB_HOST>/'"$DB_HOST"'/g' infra/main/main.tf
+      - sed -i 's/<DB_USER>/'"$DB_USER"'/g' infra/main/main.tf
+      - sed -i 's/<DB_PASS>/'"$DB_PASS"'/g' infra/main/main.tf
+      - sed -i 's/<DB_NAME>/'"$DB_NAME"'/g' infra/main/main.tf
       - TEMP_ACCESS_KEY=$(python3 scripts/retrieveSecret.py --group aws_temp_credentials --key access_key)
       - TEMP_SECRET_KEY=$(python3 scripts/retrieveSecret.py --group aws_temp_credentials --key secret_key)
       - TEMP_TOKEN=$(python3 scripts/retrieveSecret.py --group aws_temp_credentials --key token)
