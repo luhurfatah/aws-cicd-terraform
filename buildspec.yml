@@ -38,6 +38,8 @@ phases:
       - aws configure set aws_access_key_id $TEMP_ACCESS_KEY
       - aws configure set aws_secret_access_key $TEMP_SECRET_KEY
       - aws configure set aws_session_token $TEMP_TOKEN
+      - cd infra/main
+      - terraform init
       - terraform apply --auto-approve
 
 image: node:14-alpine
