@@ -36,8 +36,7 @@ jobs:
         sed -i "s|<DB_PASS>|${{ secrets.DB_PASS }}|g" infra/support/main.tf
         sed -i "s|<DB_NAME>|${{ secrets.DB_NAME }}|g" infra/support/main.tf
         sed -i "s|<SECRET_NAME>|${{ secrets.SECRET_NAME }}|g" infra/support/main.tf
-        sed -i "s|<SECRET_NAME>|${{ secrets.SECRET_NAME }}|g" scripts/updateSecret.py
-        
+
     - name: Deploy Support Infrastructure with Terraform
       run: |
         cd infra/support

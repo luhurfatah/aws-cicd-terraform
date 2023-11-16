@@ -148,8 +148,8 @@ resource "aws_codebuild_project" "app_build_deploy" {
     type         = "LINUX_CONTAINER"
 
     environment_variable {
-      name  = "<SECRET_NAME>"
-      value = "SECRET_NAME"
+      name  = "SECRET_NAME"
+      value = "<SECRET_NAME>"
     }
 
   }
