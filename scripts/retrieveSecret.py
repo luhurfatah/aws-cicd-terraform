@@ -5,7 +5,7 @@ import argparse
 
 
 def get_secret(group, key):
-    secret_name = "test-secret"
+    secret_name = "<SECRET_NAME>"
     region_name = "ap-southeast-1"
     session = boto3.session.Session()
     client = session.client(
