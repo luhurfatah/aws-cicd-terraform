@@ -36,10 +36,6 @@ jobs:
       run: |
         python3 scripts/createDynamoDB.py --name terraform_lock_main
         python3 scripts/createDynamoDB.py --name terraform_lock_support
-    
-    - name: Provision S3 Bucket for Terraform State
-      run: |
-        python3 scripts/createDynamoDB.py --name tf-state-bucket-luhur
 
     - name: Replace Variables in Terraform Config
       run: |
