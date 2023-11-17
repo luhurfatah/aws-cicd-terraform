@@ -608,3 +608,7 @@ output "api_gateway_id" {
 output "ec2_id" {
   value = aws_instance.tester_instance.id
 }
+
+output "base_uri" {
+  value = "https://${aws_api_gateway_rest_api.nodejs_api.id}-${aws_vpc_endpoint.application_vpc_execute_api_endpoint.id}.execute-api.ap-southeast-1.amazonaws.com/dev/"
+}
