@@ -27,6 +27,7 @@ resource "aws_secretsmanager_secret_version" "example_secret_version" {
     "password": "<DB_PASS>",
     "db_name" : "<DB_NAME>"
   }
+}
 EOT
 }
 
