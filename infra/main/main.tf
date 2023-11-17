@@ -597,13 +597,7 @@ output "db_host" {
   value = aws_db_instance.rds_db.endpoint
 }
 
-output "application_vpc_execute_api_endpoint_id" {
-  value = aws_vpc_endpoint.application_vpc_execute_api_endpoint.id
-}
 
-output "api_gateway_id" {
-  value = aws_api_gateway_rest_api.nodejs_api.id
-}
 
 output "ec2_id" {
   value = aws_instance.tester_instance.id
