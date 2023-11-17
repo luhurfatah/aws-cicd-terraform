@@ -34,7 +34,8 @@ jobs:
 
     - name: Provision DynamoDB Table for Terraform
       run: |
-        python3 scripts/createDynamoDB.py
+        python3 scripts/createDynamoDB.py --name terraform_lock_main
+        python3 scripts/createDynamoDB.py --name terraform_lock_support
 
     - name: Replace Variables in Terraform Config
       run: |
