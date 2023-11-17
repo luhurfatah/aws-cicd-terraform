@@ -52,6 +52,7 @@ jobs:
         CODE_COMMIT_URL=$(terraform output -raw repo_url)
         echo "CODE_COMMIT_URL=$CODE_COMMIT_URL" >> $GITHUB_ENV
 
+        
     - name: Set up Git for CodeCommit
       run: |
         git config --global user.email "luhurfatah@gmail.com"
