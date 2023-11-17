@@ -10,7 +10,7 @@ const parseEvent = (event) => {
 };
 
 const getDBSecret = async () => {
-    const secret_name = "test-secret";
+    const secret_name = "<SECRET_NAME>";
   
     const client = new SecretsManagerClient({
       region: "ap-southeast-1",
