@@ -26,13 +26,7 @@ resource "aws_secretsmanager_secret_version" "example_secret_version" {
     "username": "<DB_USER>",
     "password": "<DB_PASS>",
     "db_name" : "<DB_NAME>"
-  },
-  "aws_temp_credentials": {
-    "access_key": "<ACCESS_KEY>",
-    "secret_key": "<SECRET_KEY>",
-    "token": "<SESSION_TOKEN>"
   }
-}
 EOT
 }
 
@@ -95,6 +89,31 @@ resource "aws_iam_role_policy_attachment" "pipeline_policy_s3" {
 
 resource "aws_iam_role_policy_attachment" "codebuild_policy_s3" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+  role       = aws_iam_role.role_for_codebuild.name
+}
+
+resource "aws_iam_role_policy_attachment" "codebuild_policy_ec2" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+  role       = aws_iam_role.role_for_codebuild.name
+}
+
+resource "aws_iam_role_policy_attachment" "codebuild_policy_lambda" {
+  policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
+  role       = aws_iam_role.role_for_codebuild.name
+}
+
+resource "aws_iam_role_policy_attachment" "codebuild_policy_apigateway" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator"
+  role       = aws_iam_role.role_for_codebuild.name
+}
+
+resource "aws_iam_role_policy_attachment" "codebuild_policy_rds" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
+  role       = aws_iam_role.role_for_codebuild.name
+}
+
+resource "aws_iam_role_policy_attachment" "codebuild_policy_ssm" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
   role       = aws_iam_role.role_for_codebuild.name
 }
 
@@ -221,7 +240,23 @@ resource "aws_s3_bucket_acl" "artifacts_bucket" {
   acl    = "private"
 }
 
+resource "aws_ecr_repository" "private_ecr_repo" {
+  name                 = "private-ecr-repo"
+  image_tag_mutability = "IMMUTABLE"
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
 
 output "repo_url" {
   value = aws_codecommit_repository.app_repo.clone_url_http
+}
+
+output "private_ecr_repository_url" {
+  value = aws_ecr_repository.private_ecr_repo.repository_url
 }
