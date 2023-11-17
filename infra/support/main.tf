@@ -261,6 +261,4 @@ output "repo_url" {
   value = aws_codecommit_repository.app_repo.clone_url_http
 }
 
-output "private_ecr_repository_url" {
-  value = aws_ecr_repository.private_ecr_repo.repository_url
-}
+
