@@ -98,7 +98,7 @@ resource "aws_iam_role_policy_attachment" "codebuild_policy_ec2" {
 }
 
 resource "aws_iam_role_policy_attachment" "codebuild_policy_lambda" {
-  policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
   role       = aws_iam_role.role_for_codebuild.name
 }
 
