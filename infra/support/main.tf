@@ -14,7 +14,7 @@ terraform {
 
 
 resource "aws_secretsmanager_secret" "lfsecret" {
-  name = "lfsecret"
+  name = "db_secret"
 }
 
 resource "aws_secretsmanager_secret_version" "example_secret_version" {
@@ -254,18 +254,6 @@ resource "aws_s3_bucket_acl" "artifacts_bucket" {
 
   bucket = aws_s3_bucket.artifacts_bucket.id
   acl    = "private"
-}
-
-resource "aws_ecr_repository" "private_ecr_repo" {
-  name                 = "private-ecr-repo"
-  image_tag_mutability = "IMMUTABLE"
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 
