@@ -123,6 +123,11 @@ resource "aws_iam_role_policy_attachment" "codebuild_policy_dynamodb" {
   role       = aws_iam_role.role_for_codebuild.name
 }
 
+resource "aws_iam_role_policy_attachment" "codebuild_policy_iam" {
+  policy_arn = "arn:aws:iam::aws:policy/IAMFullAccess"
+  role       = aws_iam_role.role_for_codebuild.name
+}
+
 resource "aws_iam_role_policy" "combined_policy" {
   name = "combined-policy"
   role = aws_iam_role.role_for_codebuild.name
