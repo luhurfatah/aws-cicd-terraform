@@ -32,5 +32,8 @@ phases:
       - cd infra/main
       - terraform init
       - terraform apply --auto-approve
+      - DB_HOST=$(terraform output -raw db_host)
+      - cd ../..
+      - python3 scripts/updateSecret.py --group db_credentials --key db_host --value $DB_HOST
 
 image: node:14-alpine
